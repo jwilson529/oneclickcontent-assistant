@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function assistant_enqueue_scripts() {
     wp_enqueue_script(
-        'assistant-stream',
-        plugin_dir_url( __FILE__ ) . 'occ-assistant-stream.js',
-        array( 'jquery' ),
-        '1.6',
-        true
+      'assistant-stream',
+      plugin_dir_url(__FILE__) . 'occ-assistant-stream.js',
+      [ 'jquery' ],
+      filemtime( plugin_dir_path(__FILE__) . 'occ-assistant-stream.js' ),
+      true
     );
 
     wp_localize_script(
@@ -217,9 +217,27 @@ function assistant_render_assistant( $atts ) {
             <textarea id="<?php echo esc_attr( $unique_id ); ?>_question" rows="2" placeholder="<?php esc_attr_e( 'Ask your question…', 'assistant' ); ?>"></textarea>
             <button id="<?php echo esc_attr( $unique_id ); ?>_submit"><?php esc_html_e( 'Send', 'assistant' ); ?></button>
             <button id="<?php echo esc_attr( $unique_id ); ?>_download" type="button"><?php esc_html_e( 'Download Chat', 'assistant' ); ?></button>
+            <span id="<?php echo esc_attr( $unique_id ); ?>_spinner" class="occ-assistant-spinner"></span>
         </div>
     </div>
     <style>
+        .occ-assistant-spinner {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          margin-left: 8px;
+          vertical-align: middle;
+          border: 2px solid rgba(0, 0, 0, 0.1);
+          border-top-color: rgba(0, 0, 0, 0.6);
+          border-radius: 50%;
+          animation: occ-spin 0.8s linear infinite;
+          visibility: hidden; /* hidden by default */
+        }
+
+        @keyframes occ-spin {
+          to { transform: rotate(360deg); }
+        }
+
         #<?php echo esc_attr( $unique_id ); ?> {
             display: flex;
             flex-direction: column;
